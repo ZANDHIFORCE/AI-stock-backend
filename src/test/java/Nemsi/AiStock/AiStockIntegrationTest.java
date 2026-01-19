@@ -24,8 +24,8 @@ class AiStockIntegrationTest {
         PreStock preStock = new PreStock();
         preStock.setTicker("INTEG_TEST");
         preStock.setDate(LocalDate.now());
-        preStock.setCurPrice(100L);
-        preStock.setPredictPrice(200L);
+        preStock.setCurPrice(100.0);
+        preStock.setPredictPrice(200.0);
         // predictGap logic is inside service
 
         // when
@@ -34,7 +34,7 @@ class AiStockIntegrationTest {
         // then
         // 1. Verify retrieval
         PreStock findOne = preStockService.findOne("INTEG_TEST", LocalDate.now(), savedId).get();
-        assertThat(findOne.getPredictGap()).isEqualTo(100L); // 200 - 100
+        assertThat(findOne.getPredictGap()).isEqualTo(100.0); // 200 - 100
         assertThat(findOne.getUseYN()).isEqualTo("Y");
 
         // 2. Verify active list

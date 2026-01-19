@@ -24,10 +24,11 @@ class JdbcPreStockRepositoryTest {
         PreStock preStock = new PreStock();
         preStock.setTicker("SAMSUNG");
         preStock.setDate(LocalDate.of(2026, 1, 12));
-        preStock.setName("Samsung Electronics");
-        preStock.setCurPrice(70000L);
-        preStock.setPredictPrice(75000L);
-        preStock.setPredictGap(5000L);
+        preStock.setName("삼성전자");
+        preStock.setCurPrice(70000.0);
+        preStock.setPredictPrice(75000.0);
+        preStock.setPredictGap(5000.0);
+        preStock.setUseYN("Y");
 
         // when
         repository.save(preStock);

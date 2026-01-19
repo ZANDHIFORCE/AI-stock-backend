@@ -7,12 +7,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PreStockTest {
 
     @Test
-    void createPreStock() {
-        // given
-        LocalDate date = LocalDate.of(2026, 1, 12);
-        PreStock preStock = new PreStock(1L, date, "APPL", "Apple", 15000L, 16000L, 1000L, "Y");
+    void testPreStockConstructorAndGetters() {
+        LocalDate date = LocalDate.now();
+        PreStock preStock = new PreStock(1L, date, "APPL", "Apple", 15000.0, 16000.0, 1000.0, "Y");
 
-        // when & then
         assertThat(preStock.getId()).isEqualTo(1L);
         assertThat(preStock.getDate()).isEqualTo(date);
         assertThat(preStock.getTicker()).isEqualTo("APPL");

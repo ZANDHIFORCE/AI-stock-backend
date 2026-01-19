@@ -68,6 +68,31 @@ public class JdbcPreStockRepository implements PreStockRepository {
     }
 
     @Override
+    public List<PreStock> findBySearch(String ticker, String name, LocalDate date, String useYN) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM stock WHERE 1=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
+
+        if (ticker != null && !ticker.isEmpty()) {
+            sql.append(" AND ticker = ?");
+            params.add(ticker);
+        }
+        if (name != null && !name.isEmpty()) {
+            sql.append(" AND name LIKE ?");
+            params.add("%" + name + "%");
+        }
+        if (date != null) {
+            sql.append(" AND date = ?");
+            params.add(date.format(formatter));
+        }
+        if (useYN != null && !useYN.isEmpty()) {
+            sql.append(" AND useyn = ?");
+            params.add(useYN);
+        }
+
+        return jdbcTemplate.query(sql.toString(), preStockRowMapper(), params.toArray());
+    }
+
+    @Override
     public void update(String ticker, LocalDate date, Long id, PreStock updateParam) {
         String sql = "UPDATE stock SET name=?, curprice=?, predictprice=?, predictgap=?, useyn=? WHERE ticker=? AND date=? AND id=?";
         jdbcTemplate.update(sql,

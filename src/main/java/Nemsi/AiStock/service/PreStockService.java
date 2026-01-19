@@ -45,6 +45,13 @@ public class PreStockService {
     }
 
     /**
+     * 조건 검색
+     */
+    public List<PreStock> searchPreStocks(String ticker, String name, LocalDate date, String useYN) {
+        return preStockRepository.findBySearch(ticker, name, date, useYN);
+    }
+
+    /**
      * 단건 조회 (복합키)
      */
     public Optional<PreStock> findOne(String ticker, LocalDate date, Long id) {

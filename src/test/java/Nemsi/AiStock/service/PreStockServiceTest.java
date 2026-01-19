@@ -28,8 +28,9 @@ class PreStockServiceTest {
         // given
         PreStock preStock = new PreStock();
         preStock.setTicker("TEST");
-        preStock.setCurPrice(10000L);
-        preStock.setPredictPrice(12000L);
+        preStock.setCurPrice(10000.0);
+        preStock.setPredictPrice(12000.0);
+        preStock.setDate(LocalDate.now());
 
         // when
         preStockService.join(preStock);

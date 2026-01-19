@@ -10,6 +10,7 @@ public interface PreStockRepository {
     Optional<PreStock> findById(String ticker, LocalDate date, Long id);
     List<PreStock> findAll();
     List<PreStock> findAllByUseYN(String useYN);
+    List<PreStock> findBySearch(String ticker, String name, LocalDate date, String useYN);
     void update(String ticker, LocalDate date, Long id, PreStock updateParam);
     void delete(String ticker, LocalDate date, Long id);
 }
