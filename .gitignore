@@ -1,0 +1,31 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Java
+*.class
+*.log
+*.jar
+*.war
+*.zip
+*.tar.gz
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# VS Code
+.vscode/
+
+# Windows & OS X
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Spring Boot
+HELP.md
+logs/
