@@ -9,3 +9,17 @@ CREATE TABLE IF NOT EXISTS stock (
     useyn         VARCHAR(1) DEFAULT 'Y',
     PRIMARY KEY (ticker, date, id)
 );
+
+CREATE TABLE IF NOT EXISTS users (
+   userid varchar NOT NULL,
+   "password" varchar NOT NULL,
+   email varchar NOT NULL,
+   nickname varchar NOT NULL,
+   "role" varchar DEFAULT 'USER' NOT NULL,
+   createdd varchar NULL,
+   updatedd varchar NULL,
+   birthdd varchar NOT NULL,
+   gender varchar NOT NULL,
+   "name" varchar NOT NULL,
+   CONSTRAINT users_unique UNIQUE (userid, "password", "name", email)
+);

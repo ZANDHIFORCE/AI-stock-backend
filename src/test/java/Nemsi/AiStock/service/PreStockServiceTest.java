@@ -36,7 +36,7 @@ class PreStockServiceTest {
         preStockService.join(preStock);
 
         // then
-        assertThat(preStock.getPredictGap()).isEqualTo(2000L); // 12000 - 10000
+        assertThat(preStock.getPredictGap()).isEqualTo(2000.0); // Double comparison
         verify(preStockRepository).save(any(PreStock.class));
     }
 }

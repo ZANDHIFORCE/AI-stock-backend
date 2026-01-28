@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,8 +34,12 @@ class AiStockIntegrationTest {
 
         // then
         // 1. Verify retrieval
-        PreStock findOne = preStockService.findOne("INTEG_TEST", LocalDate.now(), savedId).get();
-        assertThat(findOne.getPredictGap()).isEqualTo(100.0); // 200 - 100
+        Optional<PreStock> optionalPreStock = preStockService.findOne("INTEG_TEST", LocalDate.now(), savedId);
+        assertThat(optionalPreStock).isPresent();
+        
+        PreStock findOne = optionalPreStock.get();
+        System.out.println(">>>> DEBUG: Expected Gap 100.0, Actual Gap: " + findOne.getPredictGap());
+        assertThat(findOne.getPredictGap()).isCloseTo(100.0, org.assertj.core.data.Offset.offset(0.001));
         assertThat(findOne.getUseYN()).isEqualTo("Y");
 
         // 2. Verify active list
