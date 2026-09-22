@@ -1,52 +1,105 @@
-# 📈 AiStock Prediction System
+# AiStock Backend
 
-AI 기반 주가 예측 데이터 관리 및 분석을 위한 Spring Boot 백엔드 애플리케이션입니다. 예측 가격과 현재 가격의 차이(Gap)를 분석하여 유망 종목 선별을 지원하며, 웹과 앱 모두를 위한 통합 인증 시스템을 제공합니다.
+**웹·앱 인증과 주가 예측 데이터의 저장·검색·이력을 관리하는 Spring Boot 백엔드**
 
-## ✨ 주요 기능
-- **통합 인증 시스템**:
-    - **Web**: Spring Security 기반 세션 로그인 및 회원가입 (BCrypt 암호화)
-    - **App**: JWT(JSON Web Token) 기반 Stateless 인증 지원
-- **공통 레이아웃**: Thymeleaf Fragment를 활용한 반응형 네비게이션 바 구현
-- **주가 예측 데이터 관리**: 종목별 예측가, 현재가, 변동폭(Gap) 저장 및 관리
-- **Gap 자동 계산**: 데이터 입력 시 예측가와 현재가의 차이를 비즈니스 로직에서 자동 산출
-- **검색 및 필터링**: 티커, 종목명, 날짜, 활성 상태(`useYN`) 등 다양한 조건으로 데이터 검색
-- **강력한 보안**: 주식 데이터 접근 및 API 호출 시 인증 필수 정책 적용
+![Java 17](https://img.shields.io/badge/Java-17-2563EB?style=flat-square)
+![Spring Boot 3.4.1](https://img.shields.io/badge/Spring_Boot-3.4.1-2563EB?style=flat-square)
+![Spring Security](https://img.shields.io/badge/Spring-Security-2563EB?style=flat-square)
+![JDBC](https://img.shields.io/badge/Data-JDBC-2563EB?style=flat-square)
 
-## 🛠 기술 스택
-- **Backend**: Java 17, Spring Boot 3.4.1
-- **Security**: Spring Security 6, JWT (JJWT 0.11.5)
-- **Database**: PostgreSQL (Remote) / H2 Database (Test) / JDBC
-- **View**: Thymeleaf, Bootstrap 5
-- **Build Tool**: Gradle
+**2인 팀 프로젝트** · 조동휘: 백엔드·아키텍처 · 팀원: DB·AI
 
-## 🚀 시작하기
+[핵심 구현](#핵심-구현) · [API](docs/API.md) · [로컬 실행](docs/SETUP.md) · [검증 기록](docs/VALIDATION.md)
 
-### 실행 방법
-1. 저장소 클론:
-   ```bash
-   git clone https://github.com/ZANDHIFORCE/AI-stock-backend.git
-   ```
-2. 프로젝트 빌드 및 실행:
-   ```bash
-   ./gradlew bootRun
-   ```
-3. 접속: `http://localhost:8080`
+<picture>
+  <source media="(max-width: 600px)" srcset="docs/assets/overview-mobile.svg">
+  <img src="docs/assets/overview.svg" alt="웹·앱 요청을 Spring Boot에서 처리하고 JDBC로 데이터베이스에 접근하는 구조">
+</picture>
 
-## 📊 API 엔드포인트
+## 프로젝트 개요
 
-### 인증 관련 (API)
-- `POST /user/api/login`: JWT 토큰 발급
-    - **Request Body**: `{"userid": "...", "password": "..."}`
-    - **Response**: `{"token": "eyJhbG..."}`
+AI가 만든 예측 가격을 현재 가격과 함께 저장하고, 종목·날짜·활성 상태별로 조회합니다. 브라우저에서는 세션 로그인으로 관리 화면을 사용하고, 앱에서는 JWT를 발급받아 API를 호출하는 흐름을 구현했습니다.
 
-### 주식 데이터 관련
-- `GET /api/stocks`: 주식 데이터 검색 및 목록 조회 (Bearer 토큰 필요)
-    - **Query Parameters**:
-        - `ticker`: 종목 코드
-        - `name`: 종목명
-        - `date`: 날짜 (`YYYY-MM-DD`)
-        - `useYN`: 활성화 여부
-    - **Headers**: `Authorization: Bearer <JWT_TOKEN>`
+이 저장소의 범위는 **예측 결과를 다루는 백엔드**입니다. AI 모델 개발과 DB 설계·구축은 팀원이 담당했습니다.
 
----
-© 2026 ZANDHIFORCE. All rights reserved.
+| 기능 | 구현 내용 |
+| :--- | :--- |
+| 웹·앱 인증 | 폼 로그인, BCrypt 비밀번호 해싱, JWT 발급·검증 |
+| 예측 결과 저장 | `예측 가격 - 현재 가격`으로 Gap 계산, 같은 종목·날짜의 이력 구분 |
+| 조건 검색 | 티커 일치, 종목명 부분 일치, 날짜, `useYN` 조건 조합 |
+
+## 담당 역할
+
+| 담당 | 범위 |
+| :--- | :--- |
+| **조동휘** | 백엔드 구현, 시스템 아키텍처 설계, 인증과 데이터 처리 흐름 구성 |
+| 팀원 | 데이터베이스 설계·구축, AI 모델 개발 |
+
+## 핵심 구현
+
+### 01. 웹 세션과 JWT 인증 연결
+
+브라우저의 폼 로그인과 앱의 토큰 인증을 하나의 Spring Security 설정에서 처리합니다. JWT 필터는 토큰을 검증한 뒤 인증 정보를 설정하고, 주식 화면과 API는 인증된 요청에만 열립니다.
+
+```mermaid
+flowchart TD
+    W[웹 / 폼 로그인·세션] --> S[Spring Security]
+    A[앱 / JWT 발급·Bearer 요청] --> J[JWT 필터]
+    J --> S
+    S --> C[Controller / Service]
+    C --> R[JDBC / Database]
+    classDef default fill:#eff6ff,stroke:#2563eb,color:#172554
+```
+
+[보안 설정](src/main/java/Nemsi/AiStock/config/SecurityConfig.java) · [JWT 필터](src/main/java/Nemsi/AiStock/config/JwtAuthenticationFilter.java) · [로그인 API](src/main/java/Nemsi/AiStock/controller/UserApiController.java)
+
+현재는 세션과 JWT를 함께 사용하는 구성입니다. API 전용 무상태 필터 체인을 별도로 분리하지는 않았습니다.
+
+### 02. 예측 결과의 이력과 활성 상태 관리
+
+같은 종목·날짜의 예측 데이터가 다시 들어오면 이전 레코드를 `useYN=N`으로 변경하고 새 레코드를 `Y`로 저장합니다. `(ticker, date, id)`로 이력을 구분합니다.
+
+| 예시 | 저장 전 | 새 데이터 저장 후 |
+| :--- | :--- | :--- |
+| 같은 종목·날짜의 기존 레코드 | `id=0, useYN=Y` | `id=0, useYN=N` |
+| 새 레코드 | 없음 | `id=1, useYN=Y` |
+
+Gap은 **가격 차이**이며, 수익률이나 괴리율(%)이 아닙니다. 예를 들어 현재가 150, 예측가 160이면 Gap은 10입니다.
+
+[계산 로직](src/main/java/Nemsi/AiStock/service/PreStockService.java) · [이력 저장 로직](src/main/java/Nemsi/AiStock/respository/JdbcPreStockRepository.java)
+
+### 03. 입력된 조건만 사용하는 검색
+
+검색 조건이 있을 때만 SQL 조건과 바인딩 값을 추가합니다. 티커·날짜·활성 상태는 일치 조건, 종목명은 부분 일치 조건으로 조회합니다.
+
+[검색 API](src/main/java/Nemsi/AiStock/controller/StockApiController.java) · [검색 테스트](src/test/java/Nemsi/AiStock/controller/StockApiControllerTest.java)
+
+## 검증과 실행
+
+JDK 17·Gradle 8.13·로컬 H2 환경에서 **기존 테스트 13개가 모두 통과**했습니다. 검증 조건과 보안·동시성 검증의 범위는 [검증 기록](docs/VALIDATION.md)에 남겼습니다.
+
+- [로컬 실행 안내](docs/SETUP.md): JDK·Gradle 준비, 원격 DB를 사용하지 않는 H2 실행 절차
+- [API 안내](docs/API.md): 인증, 검색 조건, 응답 예시
+- [DB 스키마](src/main/resources/schema.sql): 현재 구현의 테이블 정의
+
+## 현재 한계와 다음 개선
+
+- 같은 종목·날짜에 대한 동시 저장의 트랜잭션·ID 충돌 처리를 보강할 필요가 있습니다.
+- 로그인 실패와 잘못된 날짜 입력에 대한 일관된 오류 응답을 정리할 예정입니다.
+- 인증 방식별 보안 설정 분리와 인증 실패 시나리오 검증이 필요합니다.
+- 실행 설정과 인증 비밀값을 외부 설정으로 분리하고, 개발·테스트 환경을 분리할 필요가 있습니다.
+
+<details>
+<summary>기술 구성과 코드 탐색</summary>
+
+| 영역 | 사용 기술 |
+| :--- | :--- |
+| 서버 | Java 17, Spring Boot 3.4.1 |
+| 인증 | Spring Security, JJWT 0.11.5, BCrypt |
+| 저장소 | Spring JDBC, PostgreSQL, H2 |
+| 화면 | Thymeleaf, Bootstrap |
+| 테스트 | JUnit 5, Spring Boot Test, MockMvc |
+
+`config`는 인증과 의존성 구성, `controller`는 웹·API 진입점, `service`는 비즈니스 처리, `respository`는 데이터 접근을 담당합니다. `respository`는 현재 저장소의 실제 디렉터리 이름입니다.
+
+</details>
