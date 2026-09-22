@@ -11,7 +11,10 @@
 
 [핵심 구현](#핵심-구현) · [API](docs/API.md) · [로컬 실행](docs/SETUP.md) · [검증 기록](docs/VALIDATION.md)
 
-![웹과 앱의 인증 요청을 Spring Boot에서 처리하고 JDBC로 PostgreSQL에 접근하는 구조](docs/assets/overview.svg)
+<picture>
+  <source media="(max-width: 600px)" srcset="docs/assets/overview-mobile.svg">
+  <img src="docs/assets/overview.svg" alt="웹·앱 요청을 Spring Boot에서 처리하고 JDBC로 데이터베이스에 접근하는 구조">
+</picture>
 
 ## 프로젝트 개요
 
@@ -40,15 +43,12 @@ AI가 만든 예측 가격을 현재 가격과 함께 저장하고, 종목·날�
 
 ```mermaid
 flowchart TD
-    W[웹 브라우저] --> F[폼 로그인]
-    A[앱] --> L[POST /user/api/login]
-    L --> J[JWT 발급]
-    J --> B[Bearer 토큰으로 요청]
-    F --> S[Spring Security]
-    B --> V[JWT 필터]
-    V --> S
-    S --> C[Controller]
-    C --> R[Service → Repository → DB]
+    W[웹 / 폼 로그인·세션] --> S[Spring Security]
+    A[앱 / JWT 발급·Bearer 요청] --> J[JWT 필터]
+    J --> S
+    S --> C[Controller / Service]
+    C --> R[JDBC / Database]
+    classDef default fill:#eff6ff,stroke:#2563eb,color:#172554
 ```
 
 [보안 설정](src/main/java/Nemsi/AiStock/config/SecurityConfig.java) · [JWT 필터](src/main/java/Nemsi/AiStock/config/JwtAuthenticationFilter.java) · [로그인 API](src/main/java/Nemsi/AiStock/controller/UserApiController.java)
@@ -76,7 +76,7 @@ Gap은 **가격 차이**이며, 수익률이나 괴리율(%)이 아닙니다. �
 
 ## 검증과 실행
 
-저장소에는 도메인·서비스·저장소·컨트롤러 테스트가 있습니다. **테스트 코드의 존재와 통과 여부는 구분**하며, 실제 실행 결과와 제약은 [검증 기록](docs/VALIDATION.md)에 남깁니다.
+JDK 17·Gradle 8.13·로컬 H2 환경에서 **기존 테스트 13개가 모두 통과**했습니다. 검증 조건과 보안·동시성 검증의 범위는 [검증 기록](docs/VALIDATION.md)에 남겼습니다.
 
 - [로컬 실행 안내](docs/SETUP.md): JDK·Gradle 준비, 원격 DB를 사용하지 않는 H2 실행 절차
 - [API 안내](docs/API.md): 인증, 검색 조건, 응답 예시
