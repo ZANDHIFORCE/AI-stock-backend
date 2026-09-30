@@ -9,7 +9,7 @@
 
 **2인 팀 프로젝트** · 조동휘: 백엔드·아키텍처 · 팀원: DB·AI
 
-[핵심 구현](#핵심-구현) · [API](docs/API.md) · [로컬 실행](docs/SETUP.md) · [검증 기록](docs/VALIDATION.md)
+[핵심 구현](#핵심-구현) · [프로젝트 구조](#project-structure) · [API](docs/API.md) · [로컬 실행](docs/SETUP.md) · [검증 기록](docs/VALIDATION.md)
 
 <picture>
   <source media="(max-width: 600px)" srcset="docs/assets/overview-mobile.svg">
@@ -74,6 +74,31 @@ Gap은 **가격 차이**이며, 수익률이나 괴리율(%)이 아닙니다. �
 
 [검색 API](src/main/java/Nemsi/AiStock/controller/StockApiController.java) · [검색 테스트](src/test/java/Nemsi/AiStock/controller/StockApiControllerTest.java)
 
+<a id="project-structure"></a>
+
+## 📂 프로젝트 구조
+
+주요 코드와 문서만 표시했습니다.
+
+```text
+AI-stock-backend/
+├── src/main/java/Nemsi/AiStock/  # 백엔드 코드
+│   ├── config/  # 인증·JWT·의존성 설정
+│   ├── controller/  # 웹·API 진입점
+│   ├── service/  # 인증·예측 이력 처리
+│   ├── domain/  # 사용자·예측 데이터 모델
+│   └── respository/  # JDBC 데이터 접근
+├── src/main/resources/  # 설정·화면·DB 초기화
+│   ├── templates/  # Thymeleaf 화면
+│   ├── schema.sql  # 테이블 정의
+│   └── data.sql  # 초기 데이터
+├── src/test/  # 계층별·통합 테스트
+├── docs/  # API·실행·검증 문서
+└── build.gradle  # 빌드·의존성 설정
+```
+
+`respository`는 현재 저장소의 실제 디렉터리 이름입니다.
+
 ## 검증과 실행
 
 JDK 17·Gradle 8.13·로컬 H2 환경에서 **기존 테스트 13개가 모두 통과**했습니다. 검증 조건과 보안·동시성 검증의 범위는 [검증 기록](docs/VALIDATION.md)에 남겼습니다.
@@ -90,7 +115,7 @@ JDK 17·Gradle 8.13·로컬 H2 환경에서 **기존 테스트 13개가 모두 �
 - 실행 설정과 인증 비밀값을 외부 설정으로 분리하고, 개발·테스트 환경을 분리할 필요가 있습니다.
 
 <details>
-<summary>기술 구성과 코드 탐색</summary>
+<summary>기술 구성</summary>
 
 | 영역 | 사용 기술 |
 | :--- | :--- |
@@ -100,6 +125,5 @@ JDK 17·Gradle 8.13·로컬 H2 환경에서 **기존 테스트 13개가 모두 �
 | 화면 | Thymeleaf, Bootstrap |
 | 테스트 | JUnit 5, Spring Boot Test, MockMvc |
 
-`config`는 인증과 의존성 구성, `controller`는 웹·API 진입점, `service`는 비즈니스 처리, `respository`는 데이터 접근을 담당합니다. `respository`는 현재 저장소의 실제 디렉터리 이름입니다.
 
 </details>
