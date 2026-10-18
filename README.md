@@ -51,7 +51,7 @@ flowchart TD
     classDef default fill:#eff6ff,stroke:#2563eb,color:#172554
 ```
 
-[보안 설정](src/main/java/Nemsi/AiStock/config/SecurityConfig.java) · [JWT 필터](src/main/java/Nemsi/AiStock/config/JwtAuthenticationFilter.java) · [로그인 API](src/main/java/Nemsi/AiStock/controller/UserApiController.java)
+[보안 설정](src/main/java/nemsi/aistock/config/SecurityConfig.java) · [JWT 필터](src/main/java/nemsi/aistock/config/JwtAuthenticationFilter.java) · [로그인 API](src/main/java/nemsi/aistock/controller/UserApiController.java)
 
 현재는 세션과 JWT를 함께 사용하는 구성입니다. API 전용 무상태 필터 체인을 별도로 분리하지는 않았습니다.
 
@@ -66,13 +66,13 @@ flowchart TD
 
 Gap은 **가격 차이**이며, 수익률이나 괴리율(%)이 아닙니다. 예를 들어 현재가 150, 예측가 160이면 Gap은 10입니다.
 
-[계산 로직](src/main/java/Nemsi/AiStock/service/PreStockService.java) · [이력 저장 로직](src/main/java/Nemsi/AiStock/respository/JdbcPreStockRepository.java)
+[계산 로직](src/main/java/nemsi/aistock/service/PreStockService.java) · [이력 저장 로직](src/main/java/nemsi/aistock/repository/JdbcPreStockRepository.java)
 
 ### 03. 입력된 조건만 사용하는 검색
 
 검색 조건이 있을 때만 SQL 조건과 바인딩 값을 추가합니다. 티커·날짜·활성 상태는 일치 조건, 종목명은 부분 일치 조건으로 조회합니다.
 
-[검색 API](src/main/java/Nemsi/AiStock/controller/StockApiController.java) · [검색 테스트](src/test/java/Nemsi/AiStock/controller/StockApiControllerTest.java)
+[검색 API](src/main/java/nemsi/aistock/controller/StockApiController.java) · [검색 테스트](src/test/java/nemsi/aistock/controller/StockApiControllerTest.java)
 
 <a id="project-structure"></a>
 
@@ -82,22 +82,20 @@ Gap은 **가격 차이**이며, 수익률이나 괴리율(%)이 아닙니다. �
 
 ```text
 AI-stock-backend/
-├── src/main/java/Nemsi/AiStock/  # 백엔드 코드
+├── src/main/java/nemsi/aistock/  # 백엔드 코드
 │   ├── config/  # 인증·JWT·의존성 설정
 │   ├── controller/  # 웹·API 진입점
 │   ├── service/  # 인증·예측 이력 처리
 │   ├── domain/  # 사용자·예측 데이터 모델
-│   └── respository/  # JDBC 데이터 접근
+│   └── repository/  # JDBC 데이터 접근
 ├── src/main/resources/  # 설정·화면·DB 초기화
 │   ├── templates/  # Thymeleaf 화면
 │   ├── schema.sql  # 테이블 정의
-│   └── data.sql  # 초기 데이터
+│   └── application-local.properties  # 로컬 H2 설정
 ├── src/test/  # 계층별·통합 테스트
 ├── docs/  # API·실행·검증 문서
 └── build.gradle  # 빌드·의존성 설정
 ```
-
-`respository`는 현재 저장소의 실제 디렉터리 이름입니다.
 
 ## 검증과 실행
 
@@ -112,7 +110,7 @@ JDK 17·Gradle 8.13·로컬 H2 환경에서 **기존 테스트 13개가 모두 �
 - 같은 종목·날짜에 대한 동시 저장의 트랜잭션·ID 충돌 처리를 보강할 필요가 있습니다.
 - 로그인 실패와 잘못된 날짜 입력에 대한 일관된 오류 응답을 정리할 예정입니다.
 - 인증 방식별 보안 설정 분리와 인증 실패 시나리오 검증이 필요합니다.
-- 실행 설정과 인증 비밀값을 외부 설정으로 분리하고, 개발·테스트 환경을 분리할 필요가 있습니다.
+- 운영 PostgreSQL 연동과 인증 경계 검증을 보강할 필요가 있습니다.
 
 <details>
 <summary>기술 구성</summary>
