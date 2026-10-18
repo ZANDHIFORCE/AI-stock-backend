@@ -1,2 +1,0 @@
--- Data initialization for local testing
--- Currently using external PostgreSQL, so this file is kept empty to avoid conflicts.

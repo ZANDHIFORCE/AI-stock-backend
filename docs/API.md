@@ -65,11 +65,11 @@ curl "http://localhost:8080/api/stocks?ticker=AAPL&useYN=Y" \
 | `POST /user/api/login` | JWT 발급 |
 | `GET /api/stocks` | JSON 검색 API |
 
-주식 REST 컨트롤러에는 현재 GET 검색이 구현되어 있습니다. POST·PATCH·DELETE REST API는 구현 완료 기능으로 안내하지 않습니다. 웹 화면의 경로는 [PreStockController](../src/main/java/Nemsi/AiStock/controller/PreStockController.java)를 참고하세요.
+주식 REST 컨트롤러에는 현재 GET 검색이 구현되어 있습니다. POST·PATCH·DELETE REST API는 구현 완료 기능으로 안내하지 않습니다. 웹 화면의 경로는 [PreStockController](../src/main/java/nemsi/aistock/controller/PreStockController.java)를 참고하세요.
 
 ## 구현 근거
 
-- [UserApiController](../src/main/java/Nemsi/AiStock/controller/UserApiController.java)
-- [StockApiController](../src/main/java/Nemsi/AiStock/controller/StockApiController.java)
-- [PreStock](../src/main/java/Nemsi/AiStock/domain/PreStock.java)
-- [SecurityConfig](../src/main/java/Nemsi/AiStock/config/SecurityConfig.java)
+- [UserApiController](../src/main/java/nemsi/aistock/controller/UserApiController.java)
+- [StockApiController](../src/main/java/nemsi/aistock/controller/StockApiController.java)
+- [PreStock](../src/main/java/nemsi/aistock/domain/PreStock.java)
+- [SecurityConfig](../src/main/java/nemsi/aistock/config/SecurityConfig.java)

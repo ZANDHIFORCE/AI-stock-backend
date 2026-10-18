@@ -5,68 +5,54 @@
 ## 준비
 
 - **JDK 17**: `JAVA_HOME`을 JDK 17 설치 폴더로 지정합니다.
-- **Gradle 8.13**: 아래 검증에서 사용한 버전입니다. [공식 배포](https://services.gradle.org/distributions/gradle-8.13-bin.zip)를 풀고 `bin` 폴더를 PATH에 추가하거나 실행 파일의 전체 경로를 사용합니다.
-- 저장소에는 `gradlew` 스크립트가 있지만 `gradle/wrapper/gradle-wrapper.jar`가 없습니다. 따라서 현재 checkout에서 Wrapper 명령만으로 실행할 수 없습니다. 이 안내는 별도로 준비한 Gradle을 사용합니다.
+- **Gradle 8.13**: 저장소 Wrapper를 사용합니다. 최초 실행 때 배포 파일과 의존성을 내려받습니다.
 
 ```bash
 git clone https://github.com/ZANDHIFORCE/AI-stock-backend.git
 cd AI-stock-backend
 java -version
-gradle --version
+./gradlew --version
 ```
 
-## 로컬 H2 환경 선택
+Windows PowerShell에서는 `./gradlew` 대신 `.\gradlew.bat`를 사용합니다.
 
-기본 `application.properties`는 원격 PostgreSQL을 가리킵니다. 아래 값을 **현재 터미널에서 모두 설정한 뒤** 실행하면 원격 DB 대신 로컬 메모리 H2를 사용합니다. `local-demo`는 로컬 H2에 새로 지정하는 예시 비밀번호입니다.
-
-Windows PowerShell:
+## 로컬 H2 실행
 
 ```powershell
-$env:SPRING_DATASOURCE_URL = "jdbc:h2:mem:readme_demo;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;NON_KEYWORDS=ROLE,PASSWORD,NAME"
-$env:SPRING_DATASOURCE_DRIVER_CLASS_NAME = "org.h2.Driver"
-$env:SPRING_DATASOURCE_USERNAME = "sa"
-$env:SPRING_DATASOURCE_PASSWORD = "local-demo"
-$env:SPRING_SQL_INIT_MODE = "always"
-$env:SPRING_SQL_INIT_DATA_LOCATIONS = "optional:classpath:/local-demo-data.sql"
-$env:SERVER_ADDRESS = "127.0.0.1"
-$env:SERVER_PORT = "8080"
-gradle bootRun
+.\gradlew.bat bootRun --args="--spring.profiles.active=local --server.address=127.0.0.1"
 ```
 
-macOS / Linux의 동등한 설정:
+macOS / Linux:
 
 ```bash
-export SPRING_DATASOURCE_URL='jdbc:h2:mem:readme_demo;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;NON_KEYWORDS=ROLE,PASSWORD,NAME'
-export SPRING_DATASOURCE_DRIVER_CLASS_NAME='org.h2.Driver'
-export SPRING_DATASOURCE_USERNAME='sa'
-export SPRING_DATASOURCE_PASSWORD='local-demo'
-export SPRING_SQL_INIT_MODE='always'
-export SPRING_SQL_INIT_DATA_LOCATIONS='optional:classpath:/local-demo-data.sql'
-export SERVER_ADDRESS='127.0.0.1'
-export SERVER_PORT='8080'
-gradle bootRun
+./gradlew bootRun --args='--spring.profiles.active=local --server.address=127.0.0.1'
 ```
 
-`http://127.0.0.1:8080`에서 확인합니다. H2 데이터는 프로세스 종료 후 유지되지 않습니다. 위 설정은 터미널을 닫으면 사라집니다.
-
-### 데이터 초기화 설정을 바꾸는 이유
-
-기존 `data.sql`은 주석만 있어 로컬 초기화에서 빈 스크립트 오류가 발생했습니다. 위 명령은 선택적인 별도 데이터 스크립트 경로를 지정해 해당 파일의 실행을 건너뜁니다. 테이블은 기존 `schema.sql`로 생성하고 데이터는 빈 상태에서 시작합니다. 애플리케이션 소스나 DB 스키마를 수정하지 않습니다.
+`http://127.0.0.1:8080`에서 확인합니다. `local` 프로필은 `schema.sql`로 빈 H2 테이블을 만들고, 데이터는 프로세스 종료 후 사라집니다. 주석만 있던 `data.sql`은 제거했습니다. `JWT_SECRET`이 없거나 비어 있으면 로컬에서만 `SecureRandom`으로 32바이트 임시 키를 생성합니다. 키는 인증 컴포넌트 초기화 때 한 번 생성하여 유지하며, 재시작하면 이전 토큰은 무효가 됩니다. `JWT_SECRET`을 지정하면 그 값을 사용합니다.
 
 ## 테스트
 
-위 H2 환경변수를 설정한 터미널에서:
-
-```bash
-gradle test
+```powershell
+.\gradlew.bat clean test bootJar
 ```
 
-검증 환경은 Windows, JDK 17, Gradle 8.13입니다. 이 조건에서 기존 테스트 **13개가 통과**했습니다. macOS/Linux 명령은 같은 환경변수를 설정하는 동등한 안내이며 해당 운영체제에서 별도 실행하지는 않았습니다.
-
-테스트 결과 파일: `build/reports/tests/test/index.html`
+테스트 리소스에서 로컬 H2 설정을 가져오므로 원격 DB 환경변수 없이 실행할 수 있습니다. 테스트 결과는 `build/reports/tests/test/index.html`에서 확인합니다.
 
 ## PostgreSQL을 사용할 때
 
-본인이 관리하는 개발 DB를 준비한 뒤 URL·드라이버·계정·비밀번호를 모두 외부 설정으로 지정하고 [현재 스키마](../src/main/resources/schema.sql)와 호환성을 확인해야 합니다. 기존 원격 DB 접속 정보는 이 문서에서 사용하지 않습니다. PostgreSQL 연동은 이번 로컬 검증 범위에 포함되지 않습니다.
+기본 설정은 접속 정보와 `JWT_SECRET`을 외부에서 받아야 하며, 임시 키를 자동 생성하지 않습니다. [.env.example](../.env.example)의 항목을 본인 환경에 맞게 **환경변수로 설정한 뒤** 실행합니다. Spring Boot가 `.env` 파일을 자동으로 읽지는 않습니다. JWT 키는 암호학적 난수 생성기로 만든 32바이트 이상의 값을 사용합니다.
+
+```powershell
+$env:DB_URL = "jdbc:postgresql://localhost:5432/aistock"
+$env:DB_DRIVER = "org.postgresql.Driver"
+$env:DB_USERNAME = "aistock"
+$env:DB_PASSWORD = "본인 DB 비밀번호"
+$env:JWT_SECRET = "32바이트 이상의 본인 비밀키"
+.\gradlew.bat bootRun
+```
+
+DB는 [현재 스키마](../src/main/resources/schema.sql)와 호환되어야 합니다. 원격 PostgreSQL 연동은 이번 검증에 포함하지 않았습니다. JWT 서명과 만료 시간(24시간)은 기존 방식 그대로이며, 외부 키를 바꾸면 이전 토큰은 유효하지 않습니다.
+
+Wrapper JAR는 [Gradle 공식 SHA-256](https://gradle.org/release-checksums/)의 8.13 값 `81a82aaea5abcc8ff68b3dfcb58b3c3c429378efd98e7433460610fecd7ae45f`와 대조했습니다. 배포 ZIP 체크섬도 Wrapper 설정에 고정했습니다.
 
 [검증 기록](VALIDATION.md) · [API 안내](API.md)
