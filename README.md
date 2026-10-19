@@ -13,8 +13,8 @@
 [핵심 구현](#핵심-구현) · [프로젝트 구조](#project-structure) · [API](docs/API.md) · [로컬 실행](docs/SETUP.md) · [검증 기록](docs/VALIDATION.md)
 
 <picture>
-  <source media="(max-width: 600px)" srcset="docs/assets/overview-mobile.svg">
-  <img src="docs/assets/overview.svg" alt="웹·앱 요청을 Spring Boot에서 처리하고 JDBC로 데이터베이스에 접근하는 구조">
+  <source media="(max-width: 1000px)" srcset="docs/assets/service-flow-mobile.svg">
+  <img src="docs/assets/service-flow.svg" alt="웹·앱 → Spring Boot → JDBC → DB">
 </picture>
 
 ## 프로젝트 개요
@@ -33,15 +33,10 @@
 <details>
 <summary>인증 흐름 보기</summary>
 
-```mermaid
-flowchart TD
-    W[웹 / 폼 로그인·세션] --> S[Spring Security]
-    A[앱 / JWT 발급·Bearer 요청] --> J[JWT 필터]
-    J --> S
-    S --> C[Controller / Service]
-    C --> R[JDBC / Database]
-    classDef default fill:#eff6ff,stroke:#2563eb,color:#172554
-```
+<picture>
+  <source media="(max-width: 1000px)" srcset="docs/assets/auth-flow-mobile.svg">
+  <img src="docs/assets/auth-flow.svg" alt="웹 폼·세션과 앱 Bearer JWT → Spring Security → 인증된 API·화면">
+</picture>
 
 </details>
 
@@ -115,3 +110,4 @@ AI-stock-backend/
 
 
 </details>
+
