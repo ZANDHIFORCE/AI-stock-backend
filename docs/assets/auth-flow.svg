@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="260" viewBox="0 0 960 260" role="img" aria-labelledby="title">
+<title id="title">웹 폼 로그인·세션과 앱 Bearer JWT를 공유 Spring Security 설정에서 처리하고 인증된 API·화면에 접근</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/></marker></defs>
+<g font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+<rect x="1" y="1" width="958" height="258" rx="18" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="28" y="34" width="160" height="72" rx="12" fill="#fff" stroke="#cbd5e1"/>
+<text x="108.0" y="76.8" text-anchor="middle" font-size="20" fill="#334155" font-weight="600">웹</text>
+<rect x="28" y="154" width="160" height="72" rx="12" fill="#fff" stroke="#cbd5e1"/>
+<text x="108.0" y="196.8" text-anchor="middle" font-size="20" fill="#334155" font-weight="600">앱</text>
+<rect x="292" y="24" width="350" height="212" rx="12" fill="#f0fdfa" stroke="#5eead4"/>
+<text x="467" y="56" text-anchor="middle" font-size="20" fill="#0f766e" font-weight="600">Spring Security</text>
+<rect x="328" y="82" width="278" height="56" rx="12" fill="#fff" stroke="#cbd5e1"/>
+<text x="467.0" y="116.8" text-anchor="middle" font-size="20" fill="#334155" font-weight="600">폼 · 세션</text>
+<rect x="328" y="162" width="278" height="56" rx="12" fill="#fff" stroke="#cbd5e1"/>
+<text x="467.0" y="196.8" text-anchor="middle" font-size="20" fill="#334155" font-weight="600">Bearer JWT</text>
+<path d="M 196 70 H 252 V 110 H 320" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M 196 190 H 320" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M 650 130 H 752" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="700" y="112" text-anchor="middle" font-size="16" fill="#0f766e" font-weight="600">인증</text>
+<rect x="760" y="94" width="172" height="72" rx="12" fill="#fff" stroke="#cbd5e1"/>
+<text x="846.0" y="136.8" text-anchor="middle" font-size="20" fill="#334155" font-weight="600">API · 화면</text>
+</g></svg>

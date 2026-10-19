@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="144" viewBox="0 0 960 144" role="img" aria-labelledby="title">
+<title id="title">웹·앱 → Spring Boot → JDBC → 데이터베이스</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/></marker></defs>
+<g font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+<rect x="1" y="1" width="958" height="142" rx="18" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="28.0" y="36" width="189.0" height="72" rx="12" fill="#fff" stroke="#cbd5e1"/>
+<text x="122.5" y="78.8" text-anchor="middle" font-size="20" fill="#334155" font-weight="600">웹 · 앱</text>
+<path d="M 225.0 72 H 253.0" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="261.0" y="36" width="189.0" height="72" rx="12" fill="#f0fdfa" stroke="#5eead4"/>
+<text x="355.5" y="78.8" text-anchor="middle" font-size="20" fill="#0f766e" font-weight="600">Spring Boot</text>
+<path d="M 458.0 72 H 486.0" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="494.0" y="36" width="189.0" height="72" rx="12" fill="#fff" stroke="#cbd5e1"/>
+<text x="588.5" y="78.8" text-anchor="middle" font-size="20" fill="#334155" font-weight="600">JDBC</text>
+<path d="M 691.0 72 H 719.0" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="727.0" y="36" width="189.0" height="72" rx="12" fill="#fff" stroke="#cbd5e1"/>
+<text x="821.5" y="78.8" text-anchor="middle" font-size="20" fill="#334155" font-weight="600">DB</text>
+</g></svg>
